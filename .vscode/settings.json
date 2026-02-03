@@ -1,0 +1,10 @@
+{
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.tf$",
+        "cmd": "terraform fmt -recursive"
+      }
+    ]
+  }
+}
