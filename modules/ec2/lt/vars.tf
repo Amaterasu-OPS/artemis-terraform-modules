@@ -1,4 +1,5 @@
 variable "cluster_name" {
+  type        = string
   nullable    = false
   description = "Name of the cluster."
 }
@@ -12,25 +13,24 @@ variable "cluster_type" {
   nullable    = false
   description = "Type of cluster, e.g. Clickhouse, PostgreSQL, Druid."
 }
-variable "environment" {
+variable "ami_id" {
+  type        = string
   nullable    = false
-  description = "The environment in which the cluster is deployed, e.g. development, staging, production."
+  description = "AMI ID to use for the launch template."
 }
 variable "instance_type" {
   nullable    = false
   description = "Type of EC2 instance to launch."
 }
-variable "ami_id" {
+variable "key_pair_name" {
   nullable    = false
-  description = "AMI ID to use for the EC2 instance."
-}
-variable "subnet_id" {
-  nullable    = false
-  description = "Subnet ID where the EC2 instance will be launched."
-}
-variable "key_name" {
-  nullable    = false
+  type        = string
   description = "Key pair name for SSH access to the EC2 instance."
+}
+variable "user_data" {
+  type        = string
+  default     = ""
+  description = "User data script to configure the EC2 instance on launch."
 }
 variable "public_ip" {
   type        = bool
@@ -47,29 +47,18 @@ variable "tags" {
   default     = {}
   description = "A map of tags to assign to the resource."
 }
-variable "depends_on" {
-  type        = list(string)
-  nullable    = false
-  default     = []
-  description = "List of resources that this resource depends on."
-}
 variable "ebs_size" {
   type        = number
   default     = 30
   description = "Size of the EBS volume in GB."
 }
-variable "user_data" {
-  type        = string
-  default     = ""
-  description = "User data to provide when launching the instance."
+variable "environment" {
+  nullable    = false
+  description = "The environment in which the cluster is deployed, e.g. development, staging, production."
 }
-variable "iam_instance_profile" {
-  type        = string
-  default     = ""
-  description = "IAM instance profile to associate with the EC2 instance."
-}
-variable "ssm_managed" {
-  type        = bool
-  default     = true
-  description = "Whether the EC2 instance is managed by AWS Systems Manager (SSM)."
+variable "depends_on" {
+  type        = list(string)
+  nullable    = false
+  default     = []
+  description = "List of resources that this resource depends on."
 }

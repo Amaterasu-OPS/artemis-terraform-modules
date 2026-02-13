@@ -6,6 +6,19 @@ resource "tls_private_key" "pk" {
 resource "aws_key_pair" "kp" {
   key_name   = "${var.cluster_name}-${var.cluster_instance_type}-key"
   public_key = tls_private_key.pk.public_key_openssh
+
+  tags = merge(
+    var.tags,
+    {
+      Name         = "${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}-key"
+      CostTracking = "${var.cluster_type}-${var.cluster_instance_type}"
+      ResourceType = "${var.cluster_type}-${var.cluster_instance_type}-key"
+      ClusterName  = var.cluster_name
+      ClusterType  = var.cluster_type
+      Environment  = var.environment
+      ManagedBy    = "terraform"
+    }
+  )
 }
 
 resource "local_sensitive_file" "kp_file" {

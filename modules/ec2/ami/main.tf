@@ -1,20 +1,19 @@
-data "aws_ami" "aws_linux_2023" {
-  most_recent = true
+resource "aws_ami_from_instance" "this" {
+  depends_on = var.depends_on
 
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023*"]
-  }
+  name               = "${var.cluster_name}-${var.cluster_instance_type}-${var.cluster_type}-ami"
+  source_instance_id = var.instance_id
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  filter {
-    name   = "architecture"
-    values = [var.arch]
-  }
-
-  owners = ["amazon"]
+  tags = merge(
+    var.tags,
+    {
+      Name         = "${var.cluster_name}-${var.cluster_instance_type}-${var.cluster_type}-ami"
+      CostTracking = "${var.cluster_type}-${var.cluster_instance_type}"
+      ResourceType = "${var.cluster_type}-${var.cluster_instance_type}-ec2-ami"
+      ClusterName  = var.cluster_name
+      ClusterType  = var.cluster_type
+      Environment  = var.environment
+      ManagedBy    = "terraform"
+    }
+  )
 }

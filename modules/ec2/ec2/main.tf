@@ -7,6 +7,7 @@ resource "aws_instance" "this" {
   key_name                    = var.key_name
   associate_public_ip_address = var.public_ip
   user_data                   = var.user_data != "" ? base64decode(var.user_data) : null
+  iam_instance_profile        = var.iam_instance_profile
 
   metadata_options {
     http_tokens = "required"
@@ -25,12 +26,29 @@ resource "aws_instance" "this" {
   tags = merge(
     var.tags,
     {
-      Name         = "${var.cluster_name}-${var.cluster_instance_type}"
+      Name         = "${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}"
       CostTracking = "${var.cluster_type}-${var.cluster_instance_type}"
+      ResourceType = "${var.cluster_type}-${var.cluster_instance_type}-ec2-instance"
       ClusterName  = var.cluster_name
       ClusterType  = var.cluster_type
       Environment  = var.environment
       ManagedBy    = "terraform"
+      Bootstrap    = "true"
+      SSMManaged   = "${var.ssm_managed ? "true" : "false"}"
     }
   )
 }
+
+# resource "aws_ssm_association" "bootstrap" {
+#   name = "${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}}-bootstrap-association"
+
+#   targets {
+#     key    = "tag:Bootstrap"
+#     values = ["true"]
+#   }
+
+#   parameters = {
+#     commands = [
+#     ]
+#   }
+# }

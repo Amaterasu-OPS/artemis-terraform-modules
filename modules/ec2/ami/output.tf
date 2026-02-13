@@ -1,11 +1,11 @@
 output "id" {
-  value = data.aws_ami.aws_linux_2023.id
+  value = aws_ami_from_instance.this.id
+}
+
+output "arn" {
+  value = aws_ami_from_instance.this.arn
 }
 
 output "name" {
-  value = data.aws_ami.aws_linux_2023.name
-}
-
-output "image_id" {
-  value = data.aws_ami.aws_linux_2023.image_id
+  value = aws_ami_from_instance.this.name
 }

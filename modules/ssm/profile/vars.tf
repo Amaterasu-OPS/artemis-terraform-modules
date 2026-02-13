@@ -7,15 +7,15 @@ variable "cluster_instance_type" {
   default     = "node"
   description = "Type of instance in the cluster, e.g. master, worker, node, etc."
 }
-variable "pk_file_path" {
-  type        = string
-  nullable    = false
-  description = "Path where the private key file will be stored."
-}
 variable "cluster_type" {
   type        = string
   nullable    = false
   description = "Type of cluster, e.g. Clickhouse, PostgreSQL, Druid."
+}
+variable "instance_id" {
+  type        = string
+  nullable    = false
+  description = "ID of the instance to create the AMI from."
 }
 variable "environment" {
   nullable    = false

@@ -1,11 +1,12 @@
 resource "aws_security_group" "this" {
-  name = "${var.cluster_name}-${var.cluster_instance_type}-sg"
+  name = "${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}-sg"
 
   tags = merge(
     var.tags,
     {
-      Name         = "${var.cluster_name}-${var.cluster_instance_type}-sg"
-      CostTracking = "${var.cluster_type}-resources"
+      Name         = "${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}-sg"
+      CostTracking = "${var.cluster_type}-${var.cluster_instance_type}"
+      ResourceType = "${var.cluster_type}-${var.cluster_instance_type}-security-group"
       ClusterName  = var.cluster_name
       ClusterType  = var.cluster_type
       Environment  = var.environment
