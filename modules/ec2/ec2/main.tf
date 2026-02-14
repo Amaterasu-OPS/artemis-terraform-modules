@@ -14,7 +14,6 @@ resource "aws_instance" "this" {
   }
 
   root_block_device {
-    device_name           = "/dev/sda1"
     volume_type           = "gp3"
     volume_size           = var.ebs_size
     encrypted             = true
@@ -38,5 +37,5 @@ resource "aws_instance" "this" {
 }
 
 data "local_file" "script" {
-  filename = "${path.module}/../../../scripts/user_data.sh"
+  filename = "${path.module}/ec2_base.sh"
 }
