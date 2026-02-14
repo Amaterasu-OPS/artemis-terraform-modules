@@ -21,3 +21,22 @@ variable "tags" {
   default     = {}
   description = "A map of tags to assign to the resource."
 }
+variable "allowed_rules" {
+  description = "List of allowed ingress rules for the security group. Each rule should include an IP (CIDR), from_port, to_port, and optionally a protocol (default is tcp)."
+  type = list(object({
+    ip        = string
+    from_port = number
+    to_port   = number
+    protocol  = optional(string, "tcp")
+  }))
+  validation {
+    condition = alltrue([
+      for r in var.allowed_rules :
+      can(cidrhost(r.ip, 0)) &&
+      r.from_port <= r.to_port &&
+      r.from_port >= 0 &&
+      r.to_port <= 65535
+    ])
+    error_message = "Each allowed rule must have a valid CIDR IP, from_port must be less than or equal to to_port, and ports must be between 0 and 65535."
+  }
+}

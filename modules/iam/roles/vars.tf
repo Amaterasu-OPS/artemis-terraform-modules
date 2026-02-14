@@ -1,0 +1,33 @@
+variable "cluster_name" {
+  nullable    = false
+  description = "Name of the cluster."
+}
+variable "cluster_instance_type" {
+  type        = string
+  default     = "node"
+  description = "Type of instance in the cluster, e.g. master, worker, node, etc."
+}
+variable "cluster_type" {
+  type        = string
+  nullable    = false
+  description = "Type of cluster, e.g. Clickhouse, PostgreSQL, Druid."
+}
+variable "environment" {
+  nullable    = false
+  description = "The environment in which the cluster is deployed, e.g. development, staging, production."
+}
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "A map of tags to assign to the resource."
+}
+variable "policy" {
+  type        = string
+  nullable    = false
+  description = "The policy to attach to the role."
+}
+variable "ec2_role_name" {
+  type        = string
+  nullable    = false
+  description = "The name of the EC2 role to attach the policy to."
+}

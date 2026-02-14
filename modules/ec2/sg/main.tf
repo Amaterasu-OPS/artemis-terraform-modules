@@ -32,3 +32,17 @@ resource "aws_vpc_security_group_egress_rule" "outbound_all_ipv6" {
   cidr_ipv6         = "::/0"
   ip_protocol       = "-1"
 }
+
+resource "aws_security_group_rule" "ingress" {
+  for_each = {
+    for idx, rule in var.allowed_rules :
+    "${rule.ip}-${rule.from_port}-${rule.to_port}-${idx}" => rule
+  }
+
+  type              = "ingress"
+  from_port         = each.value.from_port
+  to_port           = each.value.to_port
+  protocol          = lookup(each.value, "protocol", "tcp")
+  cidr_blocks       = [each.value.ip]
+  security_group_id = aws_security_group.this.id
+}
