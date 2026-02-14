@@ -2,6 +2,9 @@
 export AWS_ACCESS_KEY_ID=${access_key}
 export AWS_SECRET_ACCESS_KEY=${secret_key}
 
+echo "* soft nofile 800000" >> /etc/security/limits.conf
+echo "* hard nofile 800000" >> /etc/security/limits.conf
+
 sudo -u ec2-user -i <<'EOF'
 cd /home/ec2-user
 
@@ -22,13 +25,13 @@ done
 sudo yum install -y yum-utils
 
 sudo sysctl -w vm.max_map_count=800000
-sudo sh -c "echo "vm.max_map_count=800000" >> /etc/sysctl.conf"
-sudo sh -c "echo "* soft nofile 800000" >> /etc/security/limits.conf"
-sudo sh -c "echo "* hard nofile 800000" >> /etc/security/limits.conf"
+sudo sh -c "echo "vm.max_map_count=800000" >> /etc/sysctl.conf
 sudo sysctl -p
 
-sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/local/aws-cli --update
+curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
+
+sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/local/aws-cli --update
 
 aws configure set aws_access_key_id ${access_key}
 aws configure set aws_secret_access_key ${secret_key}
