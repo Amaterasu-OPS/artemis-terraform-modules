@@ -1,5 +1,5 @@
 resource "aws_ami_from_instance" "this" {
-  depends_on = var.dependencies
+  depends_on = [var.dependencies]
 
   name               = "${var.cluster_name}-${var.cluster_instance_type}-${var.cluster_type}-ami"
   source_instance_id = var.instance_id
