@@ -3,7 +3,7 @@ resource "aws_launch_template" "this" {
   image_id      = var.ami_id
   instance_type = var.instance_type
   key_name      = var.key_pair_name
-  depends_on    = [var.depends_on]
+  depends_on    = var.dependencies
 
   network_interfaces {
     associate_public_ip_address = var.public_ip

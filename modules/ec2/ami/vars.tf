@@ -17,7 +17,7 @@ variable "instance_id" {
   nullable    = false
   description = "ID of the instance to create the AMI from."
 }
-variable "depends_on" {
+variable "dependencies" {
   type        = list(string)
   nullable    = false
   default     = []

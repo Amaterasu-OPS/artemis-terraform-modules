@@ -47,7 +47,7 @@ variable "tags" {
   default     = {}
   description = "A map of tags to assign to the resource."
 }
-variable "depends_on" {
+variable "dependencies" {
   type        = list(string)
   nullable    = false
   default     = []

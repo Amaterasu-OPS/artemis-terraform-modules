@@ -56,7 +56,7 @@ variable "environment" {
   nullable    = false
   description = "The environment in which the cluster is deployed, e.g. development, staging, production."
 }
-variable "depends_on" {
+variable "dependencies" {
   type        = list(string)
   nullable    = false
   default     = []
