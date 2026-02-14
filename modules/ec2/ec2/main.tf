@@ -6,7 +6,7 @@ resource "aws_instance" "this" {
   depends_on                  = [var.dependencies]
   key_name                    = var.key_name
   associate_public_ip_address = var.public_ip
-  user_data                   = "${data.template_file.script.rendered}${var.user_data != "" ? var.user_data : ""}"
+  user_data                   = "${local.script}${var.user_data != "" ? var.user_data : ""}"
   iam_instance_profile        = var.iam_instance_profile
   monitoring                  = true
 
@@ -37,29 +37,13 @@ resource "aws_instance" "this" {
   )
 }
 
-data "template_file" "script" {
-  template = file("${path.module}/ec2_base.sh")
-
-  vars = {
-    ssm_parameter_name = "ssm:${aws_ssm_parameter.this.name}"
-  }
-}
-
 resource "aws_cloudwatch_log_group" "this" {
-  name              = "/ec2/${var.cluster_name}/${var.cluster_type}/${var.cluster_instance_type}"
+  name              = local.cw_log_group_name
   retention_in_days = 7
 }
 
-data "template_file" "this" {
-  template = file("${path.module}/cw_agent_config.json")
-
-  vars = {
-    log_group_name = aws_cloudwatch_log_group.this.name
-  }
-}
-
 resource "aws_ssm_parameter" "this" {
-  name  = "/cloudwatch-agent/config/${var.cluster_name}/${var.cluster_type}/${var.cluster_instance_type}"
+  name  = local.ssm_parameter_name
   type  = "String"
-  value = data.template_file.this.rendered
+  value = local.cw_config
 }
