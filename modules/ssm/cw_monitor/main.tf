@@ -22,11 +22,11 @@ resource "aws_ssm_parameter" "cw_agent_config" {
 }
 
 resource "aws_ssm_association" "cw_agent_install" {
-  name = "AmazonCloudWatch-ManageAgent"
+  name = "${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}-cw-agent-install"
 
   targets {
-    key    = "tag:SSMManaged"
-    values = ["true"]
+    key    = "tag:Name"
+    values = ["${var.cluster_name}-${var.cluster_type}-${var.cluster_instance_type}"]
   }
 
   parameters = {

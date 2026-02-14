@@ -68,8 +68,3 @@ variable "iam_instance_profile" {
   default     = ""
   description = "IAM instance profile to associate with the EC2 instance."
 }
-variable "ssm_managed" {
-  type        = bool
-  default     = true
-  description = "Whether the EC2 instance is managed by AWS Systems Manager (SSM)."
-}
