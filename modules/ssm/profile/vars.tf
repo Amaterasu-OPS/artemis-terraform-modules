@@ -12,11 +12,6 @@ variable "cluster_type" {
   nullable    = false
   description = "Type of cluster, e.g. Clickhouse, PostgreSQL, Druid."
 }
-variable "instance_id" {
-  type        = string
-  nullable    = false
-  description = "ID of the instance to create the AMI from."
-}
 variable "environment" {
   nullable    = false
   description = "The environment in which the cluster is deployed, e.g. development, staging, production."
