@@ -6,7 +6,7 @@ resource "aws_instance" "this" {
   depends_on                  = [var.dependencies]
   key_name                    = var.key_name
   associate_public_ip_address = var.public_ip
-  user_data                   = "${file("../../../scripts/user_data.sh")}${var.user_data != "" ? var.user_data : ""}"
+  user_data                   = "${data.local_file.script.content}${var.user_data != "" ? var.user_data : ""}"
   iam_instance_profile        = var.iam_instance_profile
 
   metadata_options {
@@ -35,4 +35,8 @@ resource "aws_instance" "this" {
       ManagedBy    = "terraform"
     }
   )
+}
+
+data "local_file" "script" {
+  filename = "${path.module}/../../../scripts/user_data.sh"
 }
