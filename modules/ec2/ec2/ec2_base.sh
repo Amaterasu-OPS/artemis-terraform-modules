@@ -27,7 +27,7 @@ sudo sysctl -p
 
 sudo yum install amazon-cloudwatch-agent -y
 
-/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c ssm:/cloudwatch-agent/config/${cluster_name}/${cluster_type}/${cluster_instance_type}
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c ${ssm_parameter_name}
 
 source /home/ec2-user/.bashrc
 EOF
