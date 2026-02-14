@@ -1,7 +1,4 @@
 #!/bin/bash
-export AWS_ACCESS_KEY_ID=${access_key}
-export AWS_SECRET_ACCESS_KEY=${secret_key}
-
 echo "* soft nofile 800000" >> /etc/security/limits.conf
 echo "* hard nofile 800000" >> /etc/security/limits.conf
 
@@ -28,17 +25,9 @@ sudo sysctl -w vm.max_map_count=800000
 sudo sh -c "echo "vm.max_map_count=800000" >> /etc/sysctl.conf
 sudo sysctl -p
 
-curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
+sudo yum install amazon-cloudwatch-agent -y
 
-sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/local/aws-cli --update
-
-aws configure set aws_access_key_id ${access_key}
-aws configure set aws_secret_access_key ${secret_key}
-aws configure set aws_region ${region}
-
-echo "export AWS_ACCESS_KEY_ID=${access_key}" >> /home/ec2-user/.bashrc
-echo "export AWS_SECRET_ACCESS_KEY=${secret_key}" >> /home/ec2-user/.bashrc
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c ssm:/cloudwatch-agent/config/${cluster_name}/${cluster_type}/${cluster_instance_type}
 
 source /home/ec2-user/.bashrc
 EOF

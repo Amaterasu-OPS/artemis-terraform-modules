@@ -8,6 +8,7 @@ resource "aws_instance" "this" {
   associate_public_ip_address = var.public_ip
   user_data                   = "${data.local_file.script.content}${var.user_data != "" ? var.user_data : ""}"
   iam_instance_profile        = var.iam_instance_profile
+  monitoring                  = true
 
   metadata_options {
     http_tokens = "required"
@@ -36,6 +37,25 @@ resource "aws_instance" "this" {
   )
 }
 
-data "local_file" "script" {
-  filename = "${path.module}/ec2_base.sh"
+data "template_file" "script" {
+  template = file("${path.module}/ec2_base.sh")
+
+  vars = {
+    cluster_name          = var.cluster_name
+    cluster_type          = var.cluster_type
+    cluster_instance_type = var.cluster_instance_type
+  }
+}
+
+resource "aws_cloudwatch_log_group" "this" {
+  name              = "/ec2/${var.cluster_name}/${var.cluster_type}/${var.cluster_instance_type}"
+  retention_in_days = 7
+}
+
+data "template_file" "this" {
+  template = file("${path.module}/cw_agent_config.json")
+
+  vars = {
+    log_group_name = "/ec2/${var.cluster_name}/${var.cluster_type}/${var.cluster_instance_type}"
+  }
 }
