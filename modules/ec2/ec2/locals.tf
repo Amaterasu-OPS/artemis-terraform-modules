@@ -6,7 +6,5 @@ locals {
     ssm_parameter_name = "ssm:${local.ssm_parameter_name}"
   })
 
-  cw_config = templatefile("${path.module}/cw_agent_config.json", {
-    log_group_name = local.cw_log_group_name
-  })
+  cw_config = file("${path.module}/cw_agent_config.json")
 }

@@ -4,13 +4,20 @@
     },
     "metrics": {
         "namespace": "CWAgent",
-        "append_dimensions": {
-            "InstanceId": "${{aws:InstanceId}}"
-        },
+        "aggregation_dimensions": [
+            [
+                "InstanceId",
+                "InstanceType"
+            ],
+            [
+                "InstanceId"
+            ]
+        ],
         "metrics_collected": {
             "mem": {
                 "measurement": [
-                    "mem_used_percent"
+                    "mem_used_percent",
+                    "mem_available_percent"
                 ]
             },
             "swap": {
@@ -19,8 +26,12 @@
                 ]
             },
             "disk": {
+                "ignore_file_system_types": [
+                    "sysfs",
+                    "devtmpfs"
+                ],
                 "measurement": [
-                    "used_percent"
+                    "disk_used_percent"
                 ],
                 "resources": [
                     "*"
